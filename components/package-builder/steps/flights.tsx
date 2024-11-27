@@ -10,23 +10,10 @@ import { cn } from "@/lib/utils"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { IFlight, flightOptions } from "@/data/flights";
 
-interface IProps {
-  departureDate: Date;
-  setDepartureDate: (date: Date) => void;
-  returnDate: Date;
-  setReturnDate: (date: Date) => void;
-  selectedDepartureFlight: IFlight | null;
-  setSelectedDepartureFlight: React.Dispatch<React.SetStateAction<IFlight | null>>;
-  selectedReturnFlight: IFlight | null;
-  setSelectedReturnFlight: React.Dispatch<React.SetStateAction<IFlight | null>>;
-  skipFlights: boolean;
-  setSkipFlights: (skip: boolean) => void;
-  flightType: 'oneWay' | 'roundTrip';
-  setFlightType: (type: 'oneWay' | 'roundTrip') => void;
-  handleNext: () => void;
-}
-
-const renderFlightTable = (selectedFlight: IFlight | null, setSelectedFlight: React.Dispatch<React.SetStateAction<IFlight | null>>) => (
+const renderFlightTable = (
+	selectedFlight: IFlight | null, 
+	setSelectedFlight: React.Dispatch<React.SetStateAction<IFlight | null>>
+) => (
 	<Table>
 		<TableHeader>
 			<TableRow>
@@ -94,6 +81,22 @@ const renderFlightTable = (selectedFlight: IFlight | null, setSelectedFlight: Re
 	</Table>
 )
 
+interface IProps {
+  departureDate: Date;
+  setDepartureDate: (date: Date) => void;
+  returnDate: Date;
+  setReturnDate: (date: Date) => void;
+  selectedDepartureFlight: IFlight | null;
+  setSelectedDepartureFlight: React.Dispatch<React.SetStateAction<IFlight | null>>;
+  selectedReturnFlight: IFlight | null;
+  setSelectedReturnFlight: React.Dispatch<React.SetStateAction<IFlight | null>>;
+  skipFlights: boolean;
+  setSkipFlights: (skip: boolean) => void;
+  flightType: 'oneWay' | 'roundTrip' | undefined;
+  setFlightType: (type: 'oneWay' | 'roundTrip' | undefined) => void;
+  handleNext: () => void;
+}
+
 export function FlightsSection({
   departureDate,
   setDepartureDate,
@@ -115,6 +118,7 @@ export function FlightsSection({
         <h3 className="text-lg font-semibold">Flight Selection</h3>
         <Button variant="outline" onClick={() => {
           handleNext()
+					setFlightType(undefined)
           if (!skipFlights) {
             setSelectedDepartureFlight(null)
             setSelectedReturnFlight(null)

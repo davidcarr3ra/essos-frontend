@@ -1,27 +1,18 @@
 import { IFlight, flightOptions } from "@/data/flights";
-import { hotels } from "@/data/hotels";
+import { hotels, IHotel } from "@/data/hotels";
+import { calculateTotalCost } from "../package-builder";
+import { Building, Plane, Stethoscope } from "lucide-react";
 
 interface IProps {
   selectedPrice: number;
   skipFlights: boolean;
   selectedDepartureFlight: IFlight | null;
   selectedReturnFlight: IFlight | null;
-  flightType: 'oneWay' | 'roundTrip';
-  selectedAccommodation: string | null;
+  flightType: 'oneWay' | 'roundTrip' | undefined;
+  selectedAccommodation: IHotel | null;
   accommodationNights: number;
   includeAirportTransfer: boolean;
   includeClinicTransfer: boolean;
-	calculateTotalCost: (
-		treatmentPrice: number, 
-		skipFlights: boolean, 
-		selectedDepartureFlight: IFlight | null, 
-		selectedReturnFlight: IFlight | null, 
-		flightType: 'oneWay' | 'roundTrip', 
-		selectedAccommodation: string | null, 
-		accommodationNights: number, 
-		includeAirportTransfer: boolean, 
-		includeClinicTransfer: boolean
-	) => number;
 }
 
 export function ReviewSection({
@@ -34,13 +25,64 @@ export function ReviewSection({
   accommodationNights,
   includeAirportTransfer,
   includeClinicTransfer,
-  calculateTotalCost
 }: IProps) {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Package Summary</h3>
-      <p>Treatment Cost: ${selectedPrice}</p>
-      {!skipFlights && (
+
+			<div className="flex items-start justify-between">
+				<div className="flex gap-3">
+					<div className="mt-1">
+						<Stethoscope className="h-5 w-5 text-primary" />
+					</div>
+					<div>
+						<h3 className="font-medium">Medical Treatment</h3>
+						<p className="text-sm text-muted-foreground">Medical procedure cost</p>
+					</div>
+				</div>
+				<p className="font-medium">${selectedPrice ?? 0}</p>
+			</div>
+
+			<div className="flex items-start justify-between">
+				<div className="flex gap-3">
+					<div className="mt-1">
+						<Plane className="h-5 w-5 text-primary" />
+					</div>
+					<div>
+						<h3 className="font-medium">Flights</h3>
+						<p className="text-sm text-muted-foreground">
+							{selectedDepartureFlight?.airline} - <span className="capitalize">{selectedDepartureFlight?.class}</span>
+						</p>
+						{flightType === 'roundTrip' && (
+							<p className="text-sm text-muted-foreground">
+								Return flight included
+							</p>
+						)}
+					</div>	
+				</div>
+				<p className="font-medium">
+					${((selectedDepartureFlight?.price ?? 0) + (selectedReturnFlight?.price ?? 0)).toLocaleString()}
+				</p>
+			</div>
+
+			<div className="flex items-start justify-between">
+				<div className="flex gap-3">
+					<div className="mt-1">
+						<Building className="h-5 w-5 text-primary" />
+					</div>
+					<div>
+						<h3 className="font-medium">{selectedAccommodation?.name}</h3>
+						<p className="text-sm text-muted-foreground">
+							{accommodationNights} nights at ${selectedAccommodation?.price}/night
+						</p>
+					</div>
+				</div>
+				<p className="font-medium">
+					${(selectedAccommodation?.price || 0) * accommodationNights}
+				</p>
+			</div>
+			
+      {/* {!skipFlights && (
         <>
           {selectedDepartureFlight && (
             <p>Departure Flight: {flightOptions.find(f => 
@@ -65,10 +107,10 @@ export function ReviewSection({
             </p>
           )}
         </>
-      )}
+      )} */}
       {selectedAccommodation && (
-        <p>Accommodation: {hotels.find(h => h.id === selectedAccommodation)?.name} - 
-          ${(hotels.find(h => h.id === selectedAccommodation)?.price || 0) * accommodationNights} (${hotels.find(h => h.id === selectedAccommodation)?.price}/night for {accommodationNights} nights)
+        <p>Accommodation: {selectedAccommodation.name} - 
+          ${(selectedAccommodation.price || 0) * accommodationNights} (${selectedAccommodation.price}/night for {accommodationNights} nights)
         </p>
       )}
       {(includeAirportTransfer || includeClinicTransfer) && (

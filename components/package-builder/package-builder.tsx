@@ -15,7 +15,8 @@ import { AccommodationSection } from './steps/accommodation';
 import { LocalTransportSection } from './steps/local-transport';
 import { ReviewSection } from './steps/review';
 import { treatments } from '@/data/treatments';
-import { hotels } from '@/data/hotels';
+import { hotels, IHotel } from '@/data/hotels';
+import FlightsSection2 from './steps/flights2';
 
 const steps = [
   { 
@@ -57,12 +58,12 @@ export default function PackageBuilder() {
   const [returnDate, setReturnDate] = useState<Date>(new Date(2024, 10, 5))
   const [selectedDepartureFlight, setSelectedDepartureFlight] = useState<IFlight | null>(null)
   const [selectedReturnFlight, setSelectedReturnFlight] = useState<IFlight | null>(null)
-  const [selectedAccommodation, setSelectedAccommodation] = useState<string | null>(null)
+  const [selectedAccommodation, setSelectedAccommodation] = useState<IHotel | null>(null)
   const [accommodationNights, setAccommodationNights] = useState(1)
   const [includeAirportTransfer, setIncludeAirportTransfer] = useState(false)
   const [includeClinicTransfer, setIncludeClinicTransfer] = useState(false)
   const [skipFlights, setSkipFlights] = useState(false)
-  const [flightType, setFlightType] = useState<'oneWay' | 'roundTrip'>('roundTrip')
+  const [flightType, setFlightType] = useState<'oneWay' | 'roundTrip' | undefined>('roundTrip');
 	const { selectedPrice } = useDoctor();
 
   useEffect(() => {
@@ -106,21 +107,22 @@ export default function PackageBuilder() {
         )
       case 'flights':
         return (
-          <FlightsSection
-            departureDate={departureDate}
-            setDepartureDate={setDepartureDate}
-            returnDate={returnDate}
-            setReturnDate={setReturnDate}
-            selectedDepartureFlight={selectedDepartureFlight}
-            setSelectedDepartureFlight={setSelectedDepartureFlight}
-            selectedReturnFlight={selectedReturnFlight}
-            setSelectedReturnFlight={setSelectedReturnFlight}
-            skipFlights={skipFlights}
-            setSkipFlights={setSkipFlights}
-            flightType={flightType}
-            setFlightType={setFlightType}
-            handleNext={handleNext}
-          />
+          // <FlightsSection
+          //   departureDate={departureDate}
+          //   setDepartureDate={setDepartureDate}
+          //   returnDate={returnDate}
+          //   setReturnDate={setReturnDate}
+          //   selectedDepartureFlight={selectedDepartureFlight}
+          //   setSelectedDepartureFlight={setSelectedDepartureFlight}
+          //   selectedReturnFlight={selectedReturnFlight}
+          //   setSelectedReturnFlight={setSelectedReturnFlight}
+          //   skipFlights={skipFlights}
+          //   setSkipFlights={setSkipFlights}
+          //   flightType={flightType}
+          //   setFlightType={setFlightType}
+          //   handleNext={handleNext}
+          // />
+					<FlightsSection2 />
         )
       case 'accommodation':
         return (
@@ -154,7 +156,6 @@ export default function PackageBuilder() {
             accommodationNights={accommodationNights}
             includeAirportTransfer={includeAirportTransfer}
             includeClinicTransfer={includeClinicTransfer}
-            calculateTotalCost={calculateTotalCost}
           />
         )
       default:
@@ -237,13 +238,13 @@ export default function PackageBuilder() {
   )
 }
 
-const calculateTotalCost = (
+export const calculateTotalCost = (
 	treatmentPrice: number, 
 	skipFlights: boolean, 
 	selectedDepartureFlight: IFlight | null, 
 	selectedReturnFlight: IFlight | null, 
-	flightType: 'oneWay' | 'roundTrip',
-	selectedAccommodation: string | null,
+	flightType: 'oneWay' | 'roundTrip' | undefined,
+	selectedAccommodation: IHotel | null,
 	accommodationNights: number,
 	includeAirportTransfer: boolean,
 	includeClinicTransfer: boolean
@@ -271,7 +272,7 @@ const calculateTotalCost = (
 		}
 	}
 	if (selectedAccommodation) {
-		total += (hotels.find(h => h.id === selectedAccommodation)?.price || 0) * accommodationNights
+		total += (selectedAccommodation.price || 0) * accommodationNights
 	}
 	if (includeAirportTransfer) {
 		total += 100 // $100 for airport transfer

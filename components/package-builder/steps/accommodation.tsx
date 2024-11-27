@@ -11,8 +11,8 @@ import { Star, Wifi, Utensils, Dumbbell } from 'lucide-react'
 import { IHotel, hotels } from '@/data/hotels'
 
 interface IProps {
-  selectedAccommodation: string | null;
-  setSelectedAccommodation: (value: string | null) => void;
+  selectedAccommodation: IHotel | null;
+  setSelectedAccommodation: (value: IHotel | null) => void;
   accommodationNights: number;
   setAccommodationNights: (value: number) => void;
   handleNext: () => void;
@@ -99,7 +99,7 @@ export function AccommodationSection({
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredHotels.map((hotel) => (
-          <Card key={hotel.id} className={`overflow-hidden ${selectedAccommodation === hotel.id ? 'ring-2 ring-primary' : ''}`}>
+          <Card key={hotel.id} className={`overflow-hidden ${selectedAccommodation?.id === hotel.id ? 'ring-2 ring-primary' : ''}`}>
             <img src={hotel.image} alt={hotel.name} className="w-full h-40 object-cover" />
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
@@ -118,7 +118,7 @@ export function AccommodationSection({
                 <div className="flex gap-2">
                   {renderAmenities(hotel.amenities)}
                 </div>
-                <RadioGroup value={selectedAccommodation || ''} onValueChange={setSelectedAccommodation}>
+                <RadioGroup value={selectedAccommodation?.id || ''} onValueChange={(value) => setSelectedAccommodation(hotels.find(h => h.id === value) || null)}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value={hotel.id} id={hotel.id} />
                     <Label htmlFor={hotel.id}>Select</Label>
@@ -136,7 +136,7 @@ export function AccommodationSection({
             <CardTitle>Selected Accommodation</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <p className="font-medium">{hotels.find(h => h.id === selectedAccommodation)?.name}</p>
+            <p className="font-medium">{selectedAccommodation.name}</p>
             <div className="flex justify-between items-center">
               <Label htmlFor="nights">Number of Nights</Label>
               <Input
@@ -149,7 +149,7 @@ export function AccommodationSection({
               />
             </div>
             <p className="text-right font-bold">
-              Total: ${(hotels.find(h => h.id === selectedAccommodation)?.price || 0) * accommodationNights}
+              Total: ${(selectedAccommodation.price || 0) * accommodationNights}
             </p>
           </CardContent>
         </Card>
