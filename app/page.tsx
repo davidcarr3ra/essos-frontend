@@ -3,6 +3,7 @@ import HomePage from "@/components/home/home";
 import DoctorPage from "@/components/doctor/doctor";
 import PackageBuilderPage from "@/app/package-builder/page";
 import DoctorSearch from "@/components/doctor-search/doctor-search";
+import { useEffect } from "react";
 
 export default function Home() {
   return (
