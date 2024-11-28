@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils"
 import Link from 'next/link';
 import { useDoctor } from '@/context/doctor-context';
 import { IDoctor } from '@/data/doctors';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname, useParams } from 'next/navigation';
 
 interface IProps {
 	doctor: IDoctor;
