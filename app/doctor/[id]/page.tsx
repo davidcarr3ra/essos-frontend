@@ -5,16 +5,16 @@ import { getDoctorById } from "@/data/doctors";
 interface PageProps {
   params: {
     id: string;
-  }
+  };
 }
 
 export default function DoctorPage({ params }: PageProps) {
-	console.log("PARAMS", params);
-	const doctor = getDoctorById(params.id);
+  console.log("PARAMS", params);
+  const doctor = getDoctorById(params.id);
 
-	if (!doctor) {
-		notFound();
-	}
+  if (!doctor) {
+    notFound();
+  }
 
   return <Doctor doctor={doctor} />;
 }

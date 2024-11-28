@@ -1,29 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Calendar, CreditCard, Lock, Shield } from 'lucide-react'
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { Calendar, CreditCard, Lock, Shield } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 export default function Component() {
-  const router = useRouter()
-  const [isProcessing, setIsProcessing] = useState(false)
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsProcessing(true)
+    e.preventDefault();
+    setIsProcessing(true);
     // Simulate payment processing
     setTimeout(() => {
-      setIsProcessing(false)
-      router.push('/itinerary')
-    }, 2000)
-  }
+      setIsProcessing(false);
+      router.push("/itinerary");
+    }, 2000);
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -57,12 +70,12 @@ export default function Component() {
                       </SelectTrigger>
                       <SelectContent>
                         {Array.from({ length: 12 }, (_, i) => {
-                          const month = (i + 1).toString().padStart(2, "0")
+                          const month = (i + 1).toString().padStart(2, "0");
                           return (
                             <SelectItem key={month} value={month}>
                               {month}
                             </SelectItem>
-                          )
+                          );
                         })}
                       </SelectContent>
                     </Select>
@@ -75,12 +88,12 @@ export default function Component() {
                       </SelectTrigger>
                       <SelectContent>
                         {Array.from({ length: 10 }, (_, i) => {
-                          const year = (new Date().getFullYear() + i).toString()
+                          const year = (new Date().getFullYear() + i).toString();
                           return (
                             <SelectItem key={year} value={year}>
                               {year}
                             </SelectItem>
-                          )
+                          );
                         })}
                       </SelectContent>
                     </Select>
@@ -98,11 +111,7 @@ export default function Component() {
                 </div>
               </div>
               <Button type="submit" className="w-full" disabled={isProcessing}>
-                {isProcessing ? (
-                  <>Processing...</>
-                ) : (
-                  <>Pay $3,850</>
-                )}
+                {isProcessing ? <>Processing...</> : <>Pay $3,850</>}
               </Button>
             </form>
           </CardContent>
@@ -197,5 +206,5 @@ export default function Component() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

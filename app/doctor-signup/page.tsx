@@ -1,5 +1,5 @@
-import DoctorSignUp from "@/components/doctor-signup/doctor-signup"
+import DoctorSignUp from "@/components/doctor-signup/doctor-signup";
 
 export default function DoctorSignUpPage() {
-	return <DoctorSignUp />
+  return <DoctorSignUp />;
 }

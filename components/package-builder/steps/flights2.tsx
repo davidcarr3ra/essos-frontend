@@ -1,39 +1,55 @@
-'use client'
+"use client";
 
-import { CalendarIcon, Clock, Plane, PlaneLanding, PlaneTakeoff, RefreshCcw, Search, Settings, X } from 'lucide-react'
-import * as React from 'react'
-import { format } from "date-fns"
+import {
+  CalendarIcon,
+  Clock,
+  Plane,
+  PlaneLanding,
+  PlaneTakeoff,
+  RefreshCcw,
+  Search,
+  Settings,
+  X,
+} from "lucide-react";
+import * as React from "react";
+import { format } from "date-fns";
 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface TimeRange {
-  departure: number[]
-  arrival: number[]
+  departure: number[];
+  arrival: number[];
 }
 
 // Sample connecting airports data
@@ -47,76 +63,76 @@ const connectingAirports = [
   { code: "BCN", name: "Barcelona" },
   { code: "BEG", name: "Belgrade" },
   { code: "BER", name: "Berlin" },
-]
+];
 
 export default function FlightsSection2() {
-  const [isRoundTrip, setIsRoundTrip] = React.useState(true)
-  const [fromCity, setFromCity] = React.useState("")
-  const [toCity, setToCity] = React.useState("")
-  const [departureDate, setDepartureDate] = React.useState<Date>()
-  const [returnDate, setReturnDate] = React.useState<Date>()
+  const [isRoundTrip, setIsRoundTrip] = React.useState(true);
+  const [fromCity, setFromCity] = React.useState("");
+  const [toCity, setToCity] = React.useState("");
+  const [departureDate, setDepartureDate] = React.useState<Date>();
+  const [returnDate, setReturnDate] = React.useState<Date>();
   const [outboundTimes, setOutboundTimes] = React.useState<TimeRange>({
     departure: [0, 24],
-    arrival: [0, 24]
-  })
+    arrival: [0, 24],
+  });
   const [returnTimes, setReturnTimes] = React.useState<TimeRange>({
     departure: [0, 24],
-    arrival: [0, 24]
-  })
-  const [priceRange, setPriceRange] = React.useState(13000)
-  const [duration, setDuration] = React.useState(48)
-  const [layoverDuration, setLayoverDuration] = React.useState(24)
-  const [selectedAirports, setSelectedAirports] = React.useState<string[]>([])
-  const [allConnectingAirports, setAllConnectingAirports] = React.useState(true)
+    arrival: [0, 24],
+  });
+  const [priceRange, setPriceRange] = React.useState(13000);
+  const [duration, setDuration] = React.useState(48);
+  const [layoverDuration, setLayoverDuration] = React.useState(24);
+  const [selectedAirports, setSelectedAirports] = React.useState<string[]>([]);
+  const [allConnectingAirports, setAllConnectingAirports] = React.useState(true);
 
   const formatTime = (hour: number) => {
-    if (hour === 0 || hour === 24) return "12:00 AM"
-    if (hour === 12) return "12:00 PM"
-    return hour < 12 
-      ? `${hour}:00 AM`
-      : `${hour - 12}:00 PM`
-  }
+    if (hour === 0 || hour === 24) return "12:00 AM";
+    if (hour === 12) return "12:00 PM";
+    return hour < 12 ? `${hour}:00 AM` : `${hour - 12}:00 PM`;
+  };
 
   const getTimeRangeText = (times: TimeRange) => {
-    if (times.departure[0] === 0 && times.departure[1] === 24 &&
-        times.arrival[0] === 0 && times.arrival[1] === 24) {
-      return "Any time"
+    if (
+      times.departure[0] === 0 &&
+      times.departure[1] === 24 &&
+      times.arrival[0] === 0 &&
+      times.arrival[1] === 24
+    ) {
+      return "Any time";
     }
-    return "Time range set"
-  }
+    return "Time range set";
+  };
 
   const handleResetTimes = () => {
     setOutboundTimes({
       departure: [0, 24],
-      arrival: [0, 24]
-    })
+      arrival: [0, 24],
+    });
     setReturnTimes({
       departure: [0, 24],
-      arrival: [0, 24]
-    })
-  }
+      arrival: [0, 24],
+    });
+  };
 
   const handleResetPrice = () => {
-    setPriceRange(13000)
-  }
+    setPriceRange(13000);
+  };
 
   const handleResetDuration = () => {
-    setDuration(48)
-  }
+    setDuration(48);
+  };
 
   const handleResetConnecting = () => {
-    setLayoverDuration(24)
-    setSelectedAirports([])
-    setAllConnectingAirports(true)
-  }
+    setLayoverDuration(24);
+    setSelectedAirports([]);
+    setAllConnectingAirports(true);
+  };
 
   const toggleAirport = (code: string) => {
-    setSelectedAirports(current =>
-      current.includes(code)
-        ? current.filter(x => x !== code)
-        : [...current, code]
-    )
-  }
+    setSelectedAirports((current) =>
+      current.includes(code) ? current.filter((x) => x !== code) : [...current, code],
+    );
+  };
 
   return (
     <div className="w-full bg-background">
@@ -124,10 +140,7 @@ export default function FlightsSection2() {
         {/* Top Bar */}
         <div className="flex items-center justify-start space-x-4">
           <div className="flex items-center space-x-2">
-            <Switch
-              checked={isRoundTrip}
-              onCheckedChange={setIsRoundTrip}
-            />
+            <Switch checked={isRoundTrip} onCheckedChange={setIsRoundTrip} />
             <Label>Round trip</Label>
           </div>
           <Select defaultValue="1">
@@ -168,9 +181,15 @@ export default function FlightsSection2() {
                   <CommandInput placeholder="Search airports..." />
                   <CommandEmpty>No airports found.</CommandEmpty>
                   <CommandGroup>
-                    <CommandItem onSelect={() => setFromCity("New York (JFK)")}>New York (JFK)</CommandItem>
-                    <CommandItem onSelect={() => setFromCity("Los Angeles (LAX)")}>Los Angeles (LAX)</CommandItem>
-                    <CommandItem onSelect={() => setFromCity("London (LHR)")}>London (LHR)</CommandItem>
+                    <CommandItem onSelect={() => setFromCity("New York (JFK)")}>
+                      New York (JFK)
+                    </CommandItem>
+                    <CommandItem onSelect={() => setFromCity("Los Angeles (LAX)")}>
+                      Los Angeles (LAX)
+                    </CommandItem>
+                    <CommandItem onSelect={() => setFromCity("London (LHR)")}>
+                      London (LHR)
+                    </CommandItem>
                   </CommandGroup>
                 </Command>
               </PopoverContent>
@@ -187,7 +206,9 @@ export default function FlightsSection2() {
                   <CommandInput placeholder="Search airports..." />
                   <CommandEmpty>No airports found.</CommandEmpty>
                   <CommandGroup>
-                    <CommandItem onSelect={() => setToCity("Istanbul (IST)")}>Istanbul (IST)</CommandItem>
+                    <CommandItem onSelect={() => setToCity("Istanbul (IST)")}>
+                      Istanbul (IST)
+                    </CommandItem>
                     <CommandItem onSelect={() => setToCity("Dubai (DXB)")}>Dubai (DXB)</CommandItem>
                     <CommandItem onSelect={() => setToCity("Paris (CDG)")}>Paris (CDG)</CommandItem>
                   </CommandGroup>
@@ -215,7 +236,10 @@ export default function FlightsSection2() {
             {isRoundTrip && (
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-[150px] justify-start text-left font-normal">
+                  <Button
+                    variant="outline"
+                    className="w-[150px] justify-start text-left font-normal"
+                  >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {returnDate ? format(returnDate, "MM/dd/yyyy") : "Return"}
                   </Button>
@@ -269,13 +293,13 @@ export default function FlightsSection2() {
               <Tabs defaultValue="outbound" className="w-full">
                 <div className="border-b px-3">
                   <TabsList className="bg-transparent border-b-0 p-0 h-12">
-                    <TabsTrigger 
+                    <TabsTrigger
                       value="outbound"
                       className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4"
                     >
                       Outbound
                     </TabsTrigger>
-                    <TabsTrigger 
+                    <TabsTrigger
                       value="return"
                       className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4"
                     >
@@ -295,7 +319,8 @@ export default function FlightsSection2() {
                         <div className="flex items-center justify-between">
                           <Label>Departure</Label>
                           <span className="text-sm text-muted-foreground">
-                            {formatTime(outboundTimes.departure[0])} - {formatTime(outboundTimes.departure[1])}
+                            {formatTime(outboundTimes.departure[0])} -{" "}
+                            {formatTime(outboundTimes.departure[1])}
                           </span>
                         </div>
                         <Slider
@@ -303,7 +328,12 @@ export default function FlightsSection2() {
                           max={24}
                           step={1}
                           value={outboundTimes.departure}
-                          onValueChange={(value) => setOutboundTimes({ ...outboundTimes, departure: value as [number, number] })}
+                          onValueChange={(value) =>
+                            setOutboundTimes({
+                              ...outboundTimes,
+                              departure: value as [number, number],
+                            })
+                          }
                           className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
                         />
                       </div>
@@ -311,7 +341,8 @@ export default function FlightsSection2() {
                         <div className="flex items-center justify-between">
                           <Label>Arrival</Label>
                           <span className="text-sm text-muted-foreground">
-                            {formatTime(outboundTimes.arrival[0])} - {formatTime(outboundTimes.arrival[1])}
+                            {formatTime(outboundTimes.arrival[0])} -{" "}
+                            {formatTime(outboundTimes.arrival[1])}
                           </span>
                         </div>
                         <Slider
@@ -319,7 +350,12 @@ export default function FlightsSection2() {
                           max={24}
                           step={1}
                           value={outboundTimes.arrival}
-                          onValueChange={(value) => setOutboundTimes({ ...outboundTimes, arrival: value as [number, number] })}
+                          onValueChange={(value) =>
+                            setOutboundTimes({
+                              ...outboundTimes,
+                              arrival: value as [number, number],
+                            })
+                          }
                           className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
                         />
                       </div>
@@ -334,7 +370,8 @@ export default function FlightsSection2() {
                         <div className="flex items-center justify-between">
                           <Label>Departure</Label>
                           <span className="text-sm text-muted-foreground">
-                            {formatTime(returnTimes.departure[0])} - {formatTime(returnTimes.departure[1])}
+                            {formatTime(returnTimes.departure[0])} -{" "}
+                            {formatTime(returnTimes.departure[1])}
                           </span>
                         </div>
                         <Slider
@@ -342,7 +379,9 @@ export default function FlightsSection2() {
                           max={24}
                           step={1}
                           value={returnTimes.departure}
-                          onValueChange={(value) => setReturnTimes({ ...returnTimes, departure: value as [number, number] })}
+                          onValueChange={(value) =>
+                            setReturnTimes({ ...returnTimes, departure: value as [number, number] })
+                          }
                           className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
                         />
                       </div>
@@ -350,7 +389,8 @@ export default function FlightsSection2() {
                         <div className="flex items-center justify-between">
                           <Label>Arrival</Label>
                           <span className="text-sm text-muted-foreground">
-                            {formatTime(returnTimes.arrival[0])} - {formatTime(returnTimes.arrival[1])}
+                            {formatTime(returnTimes.arrival[0])} -{" "}
+                            {formatTime(returnTimes.arrival[1])}
                           </span>
                         </div>
                         <Slider
@@ -358,7 +398,9 @@ export default function FlightsSection2() {
                           max={24}
                           step={1}
                           value={returnTimes.arrival}
-                          onValueChange={(value) => setReturnTimes({ ...returnTimes, arrival: value as [number, number] })}
+                          onValueChange={(value) =>
+                            setReturnTimes({ ...returnTimes, arrival: value as [number, number] })
+                          }
                           className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
                         />
                       </div>
@@ -380,7 +422,7 @@ export default function FlightsSection2() {
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[180px] justify-start text-left font-normal">
                 <span className="mr-2">$</span>
-                {priceRange === 13000 ? 'All prices' : `Up to $${priceRange.toLocaleString()}`}
+                {priceRange === 13000 ? "All prices" : `Up to $${priceRange.toLocaleString()}`}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[300px] p-4">
@@ -390,7 +432,7 @@ export default function FlightsSection2() {
                     <Label>Price</Label>
                   </div>
                   <div className="text-sm text-muted-foreground mb-2">
-                    {priceRange === 13000 ? 'All prices' : `up to $${priceRange.toLocaleString()}`}
+                    {priceRange === 13000 ? "All prices" : `up to $${priceRange.toLocaleString()}`}
                   </div>
                   <div className="relative">
                     <Slider
@@ -430,9 +472,7 @@ export default function FlightsSection2() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Label>Flight duration</Label>
-                    <span className="text-sm text-muted-foreground">
-                      Under {duration} hr
-                    </span>
+                    <span className="text-sm text-muted-foreground">Under {duration} hr</span>
                   </div>
                   <Slider
                     min={1}
@@ -455,7 +495,10 @@ export default function FlightsSection2() {
           {/* Connecting Airports Filter */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="min-w-[180px] justify-start text-left font-normal px-4 whitespace-nowrap">
+              <Button
+                variant="outline"
+                className="min-w-[180px] justify-start text-left font-normal px-4 whitespace-nowrap"
+              >
                 <PlaneLanding className="mr-3 h-4 w-4" />
                 <span className="truncate">Connecting airports</span>
               </Button>
@@ -591,7 +634,7 @@ export default function FlightsSection2() {
               </CardContent>
             </Card>
 
-						<Card>
+            <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -615,7 +658,7 @@ export default function FlightsSection2() {
               </CardContent>
             </Card>
 
-						<Card>
+            <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -639,7 +682,7 @@ export default function FlightsSection2() {
               </CardContent>
             </Card>
 
-						<Card>
+            <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -663,7 +706,7 @@ export default function FlightsSection2() {
               </CardContent>
             </Card>
 
-						<Card>
+            <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -687,7 +730,7 @@ export default function FlightsSection2() {
               </CardContent>
             </Card>
 
-						<Card>
+            <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -718,7 +761,8 @@ export default function FlightsSection2() {
                   <div className="flex items-center gap-2">
                     <RefreshCcw className="h-4 w-4 text-primary" />
                     <span className="text-sm">
-                      Prices are currently <span className="text-primary font-medium">low</span> — $323 cheaper than usual
+                      Prices are currently <span className="text-primary font-medium">low</span> —
+                      $323 cheaper than usual
                     </span>
                   </div>
                 </div>
@@ -728,5 +772,5 @@ export default function FlightsSection2() {
         </ScrollArea>
       </div>
     </div>
-  )
+  );
 }

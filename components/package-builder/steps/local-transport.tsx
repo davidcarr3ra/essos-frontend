@@ -15,17 +15,20 @@ export function LocalTransportSection({
   setIncludeAirportTransfer,
   includeClinicTransfer,
   setIncludeClinicTransfer,
-  handleNext
+  handleNext,
 }: IProps) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Local Transport Options</h3>
-        <Button variant="outline" onClick={() => {
-          setIncludeAirportTransfer(false)
-          setIncludeClinicTransfer(false)
-          handleNext()
-        }}>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setIncludeAirportTransfer(false);
+            setIncludeClinicTransfer(false);
+            handleNext();
+          }}
+        >
           Skip Local Transport
         </Button>
       </div>
@@ -39,7 +42,9 @@ export function LocalTransportSection({
           <Label htmlFor="airportTransfer">Airport Transfer (Round Trip)</Label>
         </div>
         <div className="pl-6 space-y-2">
-          <p className="text-sm text-muted-foreground">Includes pickup from airport to hotel and return</p>
+          <p className="text-sm text-muted-foreground">
+            Includes pickup from airport to hotel and return
+          </p>
           <p className="font-medium">Price: $100</p>
         </div>
         <div className="flex items-center space-x-2">
@@ -51,10 +56,12 @@ export function LocalTransportSection({
           <Label htmlFor="clinicTransfer">Clinic Transfer (Round Trip)</Label>
         </div>
         <div className="pl-6 space-y-2">
-          <p className="text-sm text-muted-foreground">Includes pickup from hotel to clinic and return</p>
+          <p className="text-sm text-muted-foreground">
+            Includes pickup from hotel to clinic and return
+          </p>
           <p className="font-medium">Price: $50</p>
         </div>
       </div>
     </div>
-  )
+  );
 }

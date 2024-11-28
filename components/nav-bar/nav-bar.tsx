@@ -1,11 +1,28 @@
-"use client"
+"use client";
 
-import { CircleUserRound, Gift, HelpCircle, LogOut, Mail, Plane, LogIn, UserPlus, Stethoscope } from 'lucide-react'
-import { useState } from "react"
-import Link from "next/link"
+import {
+  CircleUserRound,
+  Gift,
+  HelpCircle,
+  LogOut,
+  Mail,
+  Plane,
+  LogIn,
+  UserPlus,
+  Stethoscope,
+} from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
 
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,25 +31,25 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { DarkModeToggle } from './dark-mode-toggle'
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DarkModeToggle } from "./dark-mode-toggle";
 
 export default function NavBar() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoggedIn(true)
-    setIsLoginOpen(false)
-  }
+    e.preventDefault();
+    setIsLoggedIn(true);
+    setIsLoginOpen(false);
+  };
 
   const handleLogout = () => {
-    setIsLoggedIn(false)
-  }
+    setIsLoggedIn(false);
+  };
 
   return (
     <header className="p-4 flex justify-between items-center">
@@ -41,21 +58,18 @@ export default function NavBar() {
       </Link>
       <div className="flex items-center space-x-2">
         <Link href="/doctor-signup" passHref>
-					{!isLoggedIn && (
-							<Button variant="outline" className="mr-2">
-								<Stethoscope className="mr-2 h-4 w-4" />
-								Doctor Sign Up
-							</Button>
-					)}
+          {!isLoggedIn && (
+            <Button variant="outline" className="mr-2">
+              <Stethoscope className="mr-2 h-4 w-4" />
+              Doctor Sign Up
+            </Button>
+          )}
         </Link>
-				<DarkModeToggle />
+        <DarkModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
-              <CircleUserRound 
-                style={{ width: '24px', height: '24px' }}
-                strokeWidth={1.5}
-              />
+              <CircleUserRound style={{ width: "24px", height: "24px" }} strokeWidth={1.5} />
               <span className="sr-only">Open user menu</span>
             </Button>
           </DropdownMenuTrigger>
@@ -73,7 +87,9 @@ export default function NavBar() {
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Log In</DialogTitle>
-                        <DialogDescription>Enter your credentials to access your account.</DialogDescription>
+                        <DialogDescription>
+                          Enter your credentials to access your account.
+                        </DialogDescription>
                       </DialogHeader>
                       <form className="space-y-4" onSubmit={handleLogin}>
                         <div>
@@ -100,7 +116,9 @@ export default function NavBar() {
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Sign Up</DialogTitle>
-                        <DialogDescription>Create an account to start your medical tourism journey.</DialogDescription>
+                        <DialogDescription>
+                          Create an account to start your medical tourism journey.
+                        </DialogDescription>
                       </DialogHeader>
                       <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                         <div>
@@ -123,22 +141,22 @@ export default function NavBar() {
                   </Dialog>
                 </>
               ) : null}
-							{isLoggedIn && (
-								<>
-									<DropdownMenuItem>
-										<CircleUserRound className="mr-2 h-4 w-4" />
-										<span>Account</span>
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										<Plane className="mr-2 h-4 w-4" />
-										<span>Trips</span>
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										<Mail className="mr-2 h-4 w-4" />
-										<span>Messages</span>
-									</DropdownMenuItem>
-              	</>
-            )}
+              {isLoggedIn && (
+                <>
+                  <DropdownMenuItem>
+                    <CircleUserRound className="mr-2 h-4 w-4" />
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Plane className="mr-2 h-4 w-4" />
+                    <span>Trips</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Mail className="mr-2 h-4 w-4" />
+                    <span>Messages</span>
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -162,5 +180,5 @@ export default function NavBar() {
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

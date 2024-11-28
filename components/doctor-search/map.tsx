@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from 'react'
-import Map, { Marker, Popup } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Star } from 'lucide-react'
-import Link from 'next/link'
-import { doctors, IDoctor } from '@/data/doctors';
-import { useDoctor } from '@/context/doctor-context';
+import { useState } from "react";
+import Map, { Marker, Popup } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Star } from "lucide-react";
+import Link from "next/link";
+import { doctors, IDoctor } from "@/data/doctors";
+import { useDoctor } from "@/context/doctor-context";
 
 // First, add this CSS either in your global CSS file or as a styled-jsx block at the top of your component
 const mapStyles = `
@@ -39,26 +39,28 @@ const mapStyles = `
 `;
 
 export default function CategoryMapView() {
-	const { selectedDoctor, setSelectedDoctor, setSelectedPrice } = useDoctor();
+  const { selectedDoctor, setSelectedDoctor, setSelectedPrice } = useDoctor();
   const [viewState, setViewState] = useState({
     latitude: 20,
     longitude: 0,
-    zoom: 1.5
-  })
+    zoom: 1.5,
+  });
 
-	const handleDoctorClick = (doctor: IDoctor | null) => {
-		setSelectedDoctor(doctor);
-	}
+  const handleDoctorClick = (doctor: IDoctor | null) => {
+    setSelectedDoctor(doctor);
+  };
 
   return (
     // <div className="flex flex-col h-screen">
-		<div className="flex flex-col h-full">
-      <style jsx global>{mapStyles}</style>
+    <div className="flex flex-col h-full">
+      <style jsx global>
+        {mapStyles}
+      </style>
       <div className="flex-grow relative">
         <Map
           {...viewState}
-          onMove={evt => setViewState(evt.viewState)}
-          style={{width: '100%', height: '100%'}}
+          onMove={(evt) => setViewState(evt.viewState)}
+          style={{ width: "100%", height: "100%" }}
           mapStyle="mapbox://styles/mapbox/light-v10"
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
           onClick={() => setSelectedDoctor(null)}
@@ -72,10 +74,10 @@ export default function CategoryMapView() {
               <button
                 className="bg-primary text-white rounded-full p-2 font-bold hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-colors"
                 onClick={(e) => {
-                  e.stopPropagation()
-                  e.preventDefault()
-                  handleDoctorClick(doctor)
-                  setSelectedPrice(doctor.price)
+                  e.stopPropagation();
+                  e.preventDefault();
+                  handleDoctorClick(doctor);
+                  setSelectedPrice(doctor.price);
                 }}
               >
                 ${doctor.price}
@@ -97,7 +99,12 @@ export default function CategoryMapView() {
                 <CardHeader className="flex flex-row items-center gap-4">
                   <Avatar>
                     <AvatarImage src={selectedDoctor.image} alt={selectedDoctor.name} />
-                    <AvatarFallback>{selectedDoctor.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                    <AvatarFallback>
+                      {selectedDoctor.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <CardTitle>{selectedDoctor.name}</CardTitle>
@@ -108,7 +115,9 @@ export default function CategoryMapView() {
                   <div className="flex items-center space-x-2 text-sm mb-2">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
                     <span className="font-medium">{selectedDoctor.rating}</span>
-                    <span className="text-muted-foreground">({selectedDoctor.reviews} reviews)</span>
+                    <span className="text-muted-foreground">
+                      ({selectedDoctor.reviews} reviews)
+                    </span>
                   </div>
                   <Badge variant="secondary" className="text-primary font-semibold mb-2">
                     ${selectedDoctor.price}
@@ -123,5 +132,5 @@ export default function CategoryMapView() {
         </Map>
       </div>
     </div>
-  )
+  );
 }

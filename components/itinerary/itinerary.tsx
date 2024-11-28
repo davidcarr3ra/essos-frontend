@@ -1,12 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { CalendarClock, Plane, MapPin, Car, Hospital, Hotel, AlertCircle, Stethoscope, Pill, LuggageIcon as Suitcase } from 'lucide-react'
+import { useState } from "react";
+import {
+  CalendarClock,
+  Plane,
+  MapPin,
+  Car,
+  Hospital,
+  Hotel,
+  AlertCircle,
+  Stethoscope,
+  Pill,
+  LuggageIcon as Suitcase,
+} from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 const stages = [
   { id: "pre-departure", name: "Pre-Departure" },
@@ -14,11 +25,11 @@ const stages = [
   { id: "pre-treatment", name: "Pre-Treatment" },
   { id: "treatment", name: "Treatment" },
   { id: "post-treatment", name: "Post-Treatment" },
-  { id: "departure", name: "Departure" }
-]
+  { id: "departure", name: "Departure" },
+];
 
 export default function PostCheckout() {
-  const [currentStage, setCurrentStage] = useState("pre-departure")
+  const [currentStage, setCurrentStage] = useState("pre-departure");
 
   return (
     <div className="container mx-auto p-6 space-y-8">
@@ -29,19 +40,26 @@ export default function PostCheckout() {
               <CardTitle className="text-2xl">Your Medical Journey</CardTitle>
               <CardDescription>Booking confirmed for March 14-16, 2024</CardDescription>
             </div>
-            <Badge variant="default" className="text-sm">Confirmed</Badge>
+            <Badge variant="default" className="text-sm">
+              Confirmed
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
-          <Progress value={(stages.findIndex(s => s.id === currentStage) + 1) / stages.length * 100} className="h-2 mt-2" />
+          <Progress
+            value={((stages.findIndex((s) => s.id === currentStage) + 1) / stages.length) * 100}
+            className="h-2 mt-2"
+          />
           <div className="flex justify-between mt-2">
             {stages.map((stage, index) => (
               <div
                 key={stage.id}
-                className={`flex flex-col items-center cursor-pointer ${currentStage === stage.id ? 'text-primary' : 'text-muted-foreground'}`}
+                className={`flex flex-col items-center cursor-pointer ${currentStage === stage.id ? "text-primary" : "text-muted-foreground"}`}
                 onClick={() => setCurrentStage(stage.id)}
               >
-                <div className={`w-3 h-3 rounded-full mb-1 ${currentStage === stage.id ? "bg-primary" : "bg-secondary"}`} />
+                <div
+                  className={`w-3 h-3 rounded-full mb-1 ${currentStage === stage.id ? "bg-primary" : "bg-secondary"}`}
+                />
                 <span className="text-xs">{stage.name}</span>
               </div>
             ))}
@@ -58,7 +76,7 @@ export default function PostCheckout() {
           <CardContent>
             <Tabs value={currentStage} onValueChange={setCurrentStage}>
               <TabsList className="grid grid-cols-3 md:grid-cols-6">
-                {stages.map(stage => (
+                {stages.map((stage) => (
                   <TabsTrigger key={stage.id} value={stage.id} className="text-xs">
                     {stage.name}
                   </TabsTrigger>
@@ -69,8 +87,12 @@ export default function PostCheckout() {
                   <Plane className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Flight Details</h4>
-                    <p className="text-sm text-muted-foreground">AirMed 123 - Departing at 10:00 AM, March 14</p>
-                    <p className="text-sm text-muted-foreground">Gate: B12 - Boarding starts at 9:15 AM</p>
+                    <p className="text-sm text-muted-foreground">
+                      AirMed 123 - Departing at 10:00 AM, March 14
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Gate: B12 - Boarding starts at 9:15 AM
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -91,15 +113,21 @@ export default function PostCheckout() {
                   <MapPin className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Arrival Information</h4>
-                    <p className="text-sm text-muted-foreground">Destination: International Airport, Terminal 2</p>
-                    <p className="text-sm text-muted-foreground">Expected arrival: 2:00 PM, March 14</p>
+                    <p className="text-sm text-muted-foreground">
+                      Destination: International Airport, Terminal 2
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Expected arrival: 2:00 PM, March 14
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
                   <Car className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Transportation to Hotel</h4>
-                    <p className="text-sm text-muted-foreground">A driver will be waiting for you at the arrival hall</p>
+                    <p className="text-sm text-muted-foreground">
+                      A driver will be waiting for you at the arrival hall
+                    </p>
                     <p className="text-sm text-muted-foreground">Driver's name: John Smith</p>
                     <p className="text-sm text-muted-foreground">Contact: +1 234 567 8900</p>
                   </div>
@@ -111,16 +139,24 @@ export default function PostCheckout() {
                   <div>
                     <h4 className="font-semibold">Accommodation Details</h4>
                     <p className="text-sm text-muted-foreground">Urban Oasis Hotel</p>
-                    <p className="text-sm text-muted-foreground">Address: 123 Healing Street, Medical District</p>
-                    <p className="text-sm text-muted-foreground">Check-in time: 3:00 PM, March 14</p>
+                    <p className="text-sm text-muted-foreground">
+                      Address: 123 Healing Street, Medical District
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Check-in time: 3:00 PM, March 14
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
                   <Hospital className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Pre-Treatment Instructions</h4>
-                    <p className="text-sm text-muted-foreground">Fasting required 8 hours before the procedure</p>
-                    <p className="text-sm text-muted-foreground">Avoid certain medications (see detailed list)</p>
+                    <p className="text-sm text-muted-foreground">
+                      Fasting required 8 hours before the procedure
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Avoid certain medications (see detailed list)
+                    </p>
                     <p className="text-sm text-muted-foreground">Get a good night's sleep</p>
                   </div>
                 </div>
@@ -130,10 +166,14 @@ export default function PostCheckout() {
                   <Stethoscope className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Treatment Details</h4>
-                    <p className="text-sm text-muted-foreground">Procedure: Specialized Medical Treatment</p>
+                    <p className="text-sm text-muted-foreground">
+                      Procedure: Specialized Medical Treatment
+                    </p>
                     <p className="text-sm text-muted-foreground">Date: March 15, 2024</p>
                     <p className="text-sm text-muted-foreground">Time: 9:00 AM</p>
-                    <p className="text-sm text-muted-foreground">Location: Global Health Center, 4th Floor</p>
+                    <p className="text-sm text-muted-foreground">
+                      Location: Global Health Center, 4th Floor
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -168,7 +208,9 @@ export default function PostCheckout() {
                     <h4 className="font-semibold">Follow-up Appointment</h4>
                     <p className="text-sm text-muted-foreground">Date: March 16, 2024</p>
                     <p className="text-sm text-muted-foreground">Time: 2:00 PM</p>
-                    <p className="text-sm text-muted-foreground">Location: Global Health Center, 2nd Floor</p>
+                    <p className="text-sm text-muted-foreground">
+                      Location: Global Health Center, 2nd Floor
+                    </p>
                   </div>
                 </div>
               </TabsContent>
@@ -177,8 +219,12 @@ export default function PostCheckout() {
                   <Plane className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Return Flight Details</h4>
-                    <p className="text-sm text-muted-foreground">AirMed 456 - Departing at 8:00 PM, March 16</p>
-                    <p className="text-sm text-muted-foreground">Gate: C24 - Boarding starts at 7:15 PM</p>
+                    <p className="text-sm text-muted-foreground">
+                      AirMed 456 - Departing at 8:00 PM, March 16
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Gate: C24 - Boarding starts at 7:15 PM
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -197,7 +243,9 @@ export default function PostCheckout() {
                   <Car className="w-5 h-5 mt-0.5 text-primary" />
                   <div>
                     <h4 className="font-semibold">Airport Transfer</h4>
-                    <p className="text-sm text-muted-foreground">A driver will pick you up from the hotel at 4:30 PM</p>
+                    <p className="text-sm text-muted-foreground">
+                      A driver will pick you up from the hotel at 4:30 PM
+                    </p>
                     <p className="text-sm text-muted-foreground">Driver's name: Sarah Johnson</p>
                     <p className="text-sm text-muted-foreground">Contact: +1 234 567 8901</p>
                   </div>
@@ -240,5 +288,5 @@ export default function PostCheckout() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

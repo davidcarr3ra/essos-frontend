@@ -40,9 +40,7 @@ export default function RootLayout({
           <div>
             <NavBar />
           </div>
-          <DoctorProvider>
-            {children}
-          </DoctorProvider>
+          <DoctorProvider>{children}</DoctorProvider>
         </ThemeProvider>
       </body>
     </html>

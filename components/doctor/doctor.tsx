@@ -1,34 +1,48 @@
 "use client";
 
-import { useState, useEffect } from 'react'
-import { format, getDay } from 'date-fns'
-import { CalendarIcon, Send } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
-import Link from 'next/link';
-import { useDoctor } from '@/context/doctor-context';
-import { IDoctor } from '@/data/doctors';
-import { useRouter, useSearchParams, usePathname, useParams } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { format, getDay } from "date-fns";
+import { CalendarIcon, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useDoctor } from "@/context/doctor-context";
+import { IDoctor } from "@/data/doctors";
+import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 
 interface IProps {
-	doctor: IDoctor;
+  doctor: IDoctor;
 }
 
 export default function DoctorPage({ doctor }: IProps) {
-  const [isMessageOpen, setIsMessageOpen] = useState(false)
-  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([])
-  const [newMessage, setNewMessage] = useState('')
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
-  const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([])
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [messages, setMessages] = useState<{ sender: string; content: string }[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
 
   const renderStars = (rating: number) => {
     return (
@@ -42,48 +56,54 @@ export default function DoctorPage({ doctor }: IProps) {
           </span>
         ))}
       </span>
-    )
-  }
+    );
+  };
 
   const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (newMessage.trim()) {
-      setMessages([...messages, { sender: 'You', content: newMessage.trim() }])
-      setNewMessage('')
+      setMessages([...messages, { sender: "You", content: newMessage.trim() }]);
+      setNewMessage("");
       // Simulate doctor's response after a short delay
       setTimeout(() => {
-        setMessages(prev => [...prev, { sender: doctor.name, content: "Thank you for your message. How can I assist you today?" }])
-      }, 1000)
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: doctor.name,
+            content: "Thank you for your message. How can I assist you today?",
+          },
+        ]);
+      }, 1000);
     }
-  }
+  };
 
   const generateTimeSlots = (date: Date) => {
-    const day = getDay(date)
-    let slots: string[] = []
+    const day = getDay(date);
+    let slots: string[] = [];
 
     // Weekdays
     if (day >= 1 && day <= 5) {
-      slots = ["9:00 AM", "10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM", "4:00 PM"]
+      slots = ["9:00 AM", "10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM", "4:00 PM"];
     }
     // Saturday
     else if (day === 6) {
-      slots = ["10:00 AM", "11:00 AM", "12:00 PM"]
+      slots = ["10:00 AM", "11:00 AM", "12:00 PM"];
     }
     // Sunday
     else {
-      slots = []
+      slots = [];
     }
 
     // Simulate some slots being unavailable
-    return slots.filter(() => Math.random() > 0.3)
-  }
+    return slots.filter(() => Math.random() > 0.3);
+  };
 
   useEffect(() => {
     if (selectedDate) {
-      setAvailableTimeSlots(generateTimeSlots(selectedDate))
-      setSelectedTime(null)
+      setAvailableTimeSlots(generateTimeSlots(selectedDate));
+      setSelectedTime(null);
     }
-  }, [selectedDate])
+  }, [selectedDate]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -94,7 +114,12 @@ export default function DoctorPage({ doctor }: IProps) {
               <CardHeader className="flex flex-col md:flex-row items-center md:items-start gap-4">
                 <Avatar className="w-32 h-32">
                   <AvatarImage src={doctor.image} alt={doctor.name} />
-                  <AvatarFallback>{doctor.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                  <AvatarFallback>
+                    {doctor.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">
                   <CardTitle className="text-3xl mb-2">{doctor.name}</CardTitle>
@@ -102,16 +127,22 @@ export default function DoctorPage({ doctor }: IProps) {
                   <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-2">
                     <Badge variant="secondary">{doctor.location}</Badge>
                     <Badge variant="secondary">{doctor.experience} Years Experience</Badge>
-                    <Badge variant="secondary">{doctor.rating} ★ ({doctor.reviews} reviews)</Badge>
+                    <Badge variant="secondary">
+                      {doctor.rating} ★ ({doctor.reviews} reviews)
+                    </Badge>
                     <Badge variant="secondary">${doctor.price} per procedure</Badge>
                   </div>
                   <div className="mt-4 space-x-2">
-                    <Button variant="outline" onClick={() => setIsMessageOpen(true)}>Message Doctor</Button>
+                    <Button variant="outline" onClick={() => setIsMessageOpen(true)}>
+                      Message Doctor
+                    </Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <h2 className="text-2xl font-semibold mb-4">About Dr. {doctor.name.split(" ")[1]}</h2>
+                <h2 className="text-2xl font-semibold mb-4">
+                  About Dr. {doctor.name.split(" ")[1]}
+                </h2>
                 <p className="mb-4">{doctor.about}</p>
                 <h3 className="text-xl font-semibold mb-2">Education & Training</h3>
                 <ul className="list-disc list-inside mb-4">
@@ -132,8 +163,16 @@ export default function DoctorPage({ doctor }: IProps) {
                   {doctor.beforeAfterImages.map((images, index) => (
                     <div key={index} className="space-y-2">
                       <div className="grid grid-cols-2 gap-2">
-                        <img src={images.before} alt={`Before ${index + 1}`} className="w-full h-auto rounded" />
-                        <img src={images.after} alt={`After ${index + 1}`} className="w-full h-auto rounded" />
+                        <img
+                          src={images.before}
+                          alt={`Before ${index + 1}`}
+                          className="w-full h-auto rounded"
+                        />
+                        <img
+                          src={images.after}
+                          alt={`After ${index + 1}`}
+                          className="w-full h-auto rounded"
+                        />
                       </div>
                       <p className="text-center text-sm text-muted-foreground">Case {index + 1}</p>
                     </div>
@@ -177,7 +216,7 @@ export default function DoctorPage({ doctor }: IProps) {
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !selectedDate && "text-muted-foreground"
+                        !selectedDate && "text-muted-foreground",
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -189,8 +228,8 @@ export default function DoctorPage({ doctor }: IProps) {
                       mode="single"
                       selected={selectedDate}
                       onSelect={(date) => {
-                        setSelectedDate(date)
-                        setSelectedTime(null)
+                        setSelectedDate(date);
+                        setSelectedTime(null);
                       }}
                       initialFocus
                     />
@@ -223,11 +262,7 @@ export default function DoctorPage({ doctor }: IProps) {
                 )}
 
                 <Button className="w-full" disabled={!selectedDate || !selectedTime}>
-                  <Link
-										href="/package-builder"
-                  >
-                    Book Appointment
-                  </Link>
+                  <Link href="/package-builder">Book Appointment</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -240,13 +275,17 @@ export default function DoctorPage({ doctor }: IProps) {
           <DialogHeader>
             <DialogTitle>Message Dr. {doctor.name.split(" ")[1]}</DialogTitle>
             <DialogDescription>
-              Start a conversation with Dr. {doctor.name.split(" ")[1]}. They typically respond within 24 hours.
+              Start a conversation with Dr. {doctor.name.split(" ")[1]}. They typically respond
+              within 24 hours.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col h-[400px]">
             <ScrollArea className="flex-grow mb-4 p-4 border rounded-md">
               {messages.map((msg, index) => (
-                <div key={index} className={`mb-2 ${msg.sender === 'You' ? 'text-right' : 'text-left'}`}>
+                <div
+                  key={index}
+                  className={`mb-2 ${msg.sender === "You" ? "text-right" : "text-left"}`}
+                >
                   <span className="font-semibold">{msg.sender}: </span>
                   <span>{msg.content}</span>
                 </div>
@@ -268,5 +307,5 @@ export default function DoctorPage({ doctor }: IProps) {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

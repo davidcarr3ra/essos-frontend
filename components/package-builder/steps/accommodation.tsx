@@ -1,14 +1,20 @@
 "use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Star, Wifi, Utensils, Dumbbell } from 'lucide-react'
-import { IHotel, hotels } from '@/data/hotels'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Star, Wifi, Utensils, Dumbbell } from "lucide-react";
+import { IHotel, hotels } from "@/data/hotels";
 
 interface IProps {
   selectedAccommodation: IHotel | null;
@@ -18,50 +24,63 @@ interface IProps {
   handleNext: () => void;
 }
 
-export function AccommodationSection({ 
-  selectedAccommodation, 
-  setSelectedAccommodation, 
-  accommodationNights, 
+export function AccommodationSection({
+  selectedAccommodation,
+  setSelectedAccommodation,
+  accommodationNights,
   setAccommodationNights,
-  handleNext
+  handleNext,
 }: IProps) {
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 300])
-  const [starFilter, setStarFilter] = useState<number | null>(null)
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 300]);
+  const [starFilter, setStarFilter] = useState<number | null>(null);
 
-  const filteredHotels = hotels.filter((hotel: IHotel) => 
-    hotel.price >= priceRange[0] && 
-    hotel.price <= priceRange[1] &&
-    (starFilter === null || hotel.stars === starFilter)
-  )
+  const filteredHotels = hotels.filter(
+    (hotel: IHotel) =>
+      hotel.price >= priceRange[0] &&
+      hotel.price <= priceRange[1] &&
+      (starFilter === null || hotel.stars === starFilter),
+  );
 
   const renderStars = (count: number) => {
-    return Array(5).fill(0).map((_, i) => (
-      <Star key={i} className={`w-4 h-4 ${i < count ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
-    ))
-  }
+    return Array(5)
+      .fill(0)
+      .map((_, i) => (
+        <Star
+          key={i}
+          className={`w-4 h-4 ${i < count ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+        />
+      ));
+  };
 
   const renderAmenities = (amenities: string[]) => {
     const amenityIcons = {
       wifi: <Wifi className="w-4 h-4" />,
       restaurant: <Utensils className="w-4 h-4" />,
       gym: <Dumbbell className="w-4 h-4" />,
-    }
-    return amenities.map(amenity => (
-      <div key={amenity} className="flex items-center gap-1" title={amenity.charAt(0).toUpperCase() + amenity.slice(1)}>
+    };
+    return amenities.map((amenity) => (
+      <div
+        key={amenity}
+        className="flex items-center gap-1"
+        title={amenity.charAt(0).toUpperCase() + amenity.slice(1)}
+      >
         {amenityIcons[amenity as keyof typeof amenityIcons]}
       </div>
-    ))
-  }
+    ));
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Accommodation Selection</h3>
-        <Button variant="outline" onClick={() => {
-          setSelectedAccommodation(null)
-          setAccommodationNights(1)
-          handleNext()
-        }}>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setSelectedAccommodation(null);
+            setAccommodationNights(1);
+            handleNext();
+          }}
+        >
           Skip Accommodation
         </Button>
       </div>
@@ -69,7 +88,11 @@ export function AccommodationSection({
       <div className="flex gap-4">
         <div className="flex-1">
           <Label htmlFor="priceRange">Price Range</Label>
-          <Select onValueChange={(value) => setPriceRange(value.split(',').map(Number) as [number, number])}>
+          <Select
+            onValueChange={(value) =>
+              setPriceRange(value.split(",").map(Number) as [number, number])
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select price range" />
             </SelectTrigger>
@@ -83,7 +106,7 @@ export function AccommodationSection({
         </div>
         <div className="flex-1">
           <Label htmlFor="starRating">Star Rating</Label>
-          <Select onValueChange={(value) => setStarFilter(value === 'all' ? null : Number(value))}>
+          <Select onValueChange={(value) => setStarFilter(value === "all" ? null : Number(value))}>
             <SelectTrigger>
               <SelectValue placeholder="Select star rating" />
             </SelectTrigger>
@@ -99,7 +122,10 @@ export function AccommodationSection({
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredHotels.map((hotel) => (
-          <Card key={hotel.id} className={`overflow-hidden ${selectedAccommodation?.id === hotel.id ? 'ring-2 ring-primary' : ''}`}>
+          <Card
+            key={hotel.id}
+            className={`overflow-hidden ${selectedAccommodation?.id === hotel.id ? "ring-2 ring-primary" : ""}`}
+          >
             <img src={hotel.image} alt={hotel.name} className="w-full h-40 object-cover" />
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
@@ -107,18 +133,19 @@ export function AccommodationSection({
                 <span className="text-2xl font-bold">${hotel.price}</span>
               </CardTitle>
               <CardDescription>
-                <div className="flex items-center gap-1 mb-2">
-                  {renderStars(hotel.stars)}
-                </div>
+                <div className="flex items-center gap-1 mb-2">{renderStars(hotel.stars)}</div>
                 {hotel.description}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex justify-between items-center">
-                <div className="flex gap-2">
-                  {renderAmenities(hotel.amenities)}
-                </div>
-                <RadioGroup value={selectedAccommodation?.id || ''} onValueChange={(value) => setSelectedAccommodation(hotels.find(h => h.id === value) || null)}>
+                <div className="flex gap-2">{renderAmenities(hotel.amenities)}</div>
+                <RadioGroup
+                  value={selectedAccommodation?.id || ""}
+                  onValueChange={(value) =>
+                    setSelectedAccommodation(hotels.find((h) => h.id === value) || null)
+                  }
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value={hotel.id} id={hotel.id} />
                     <Label htmlFor={hotel.id}>Select</Label>
@@ -155,5 +182,5 @@ export function AccommodationSection({
         </Card>
       )}
     </div>
-  )
+  );
 }
