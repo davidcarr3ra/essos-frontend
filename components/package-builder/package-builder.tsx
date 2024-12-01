@@ -242,9 +242,7 @@ export default function PackageBuilder() {
         </CardHeader>
         <CardContent>{renderStepContent()}</CardContent>
         <CardFooter className="flex justify-between">
-          {/* {currentStep !== 0 && steps[currentStep].id !== "flights" && ( */}
-            <Button onClick={handleBack}>Back</Button>
-          {/* )} */}
+					<Button onClick={handleBack}>Back</Button>
           {currentStep === steps.length - 1 ? (
             <Link href="/checkout">
               <Button>Checkout</Button>
@@ -297,21 +295,9 @@ export const calculateTotalCost = (
   total += treatmentPrice;
   if (!skipFlights) {
     if (selectedDepartureFlight) {
-      // const departureFlight = flightOptions.find(
-      //   (f) => f.id === selectedDepartureFlight.id && f.class === selectedDepartureFlight.class,
-      // );
-      // if (departureFlight) {
-      //   total += departureFlight.price;
-      // }
 			total += parseFloat(selectedDepartureFlight.totalAmount);
     }
     if (flightType === "roundTrip" && selectedReturnFlight) {
-      // const returnFlight = flightOptions.find(
-      //   (f) => f.id === selectedReturnFlight.id && f.class === selectedReturnFlight.class,
-      // );
-      // if (returnFlight) {
-      //   total += returnFlight.price;
-      // }
 			total += parseFloat(selectedReturnFlight.totalAmount);
     }
   }
@@ -319,10 +305,10 @@ export const calculateTotalCost = (
     total += (selectedAccommodation.price || 0) * accommodationNights;
   }
   if (includeAirportTransfer) {
-    total += 100; // $100 for airport transfer
+    total += 100;
   }
   if (includeClinicTransfer) {
-    total += 50; // $50 for clinic transfer
+    total += 50;
   }
   return total;
 };

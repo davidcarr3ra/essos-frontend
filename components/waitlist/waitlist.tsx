@@ -55,7 +55,8 @@ export default function WaitlistPage() {
       <div className="absolute z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-[-180px]">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <button className="text-lg px-8 py-3 backdrop-blur-sm !bg-background/20 text-white rounded-lg">
+            <button className="text-lg px-8 py-3 backdrop-blur-sm !bg-background/20 text-white rounded-lg 
+              transition-all duration-300 hover:bg-background/30 hover:scale-105 hover:shadow-lg">
               Join Waitlist
             </button>
           </DialogTrigger>
@@ -92,7 +93,8 @@ export default function WaitlistPage() {
       </div>
       <div className="absolute z-10 top-4 right-4">
         <button 
-          className="text-base px-6 py-2 backdrop-blur-sm !bg-background/20 text-white rounded-lg"
+          className="text-base px-6 py-2 backdrop-blur-sm !bg-background/20 text-white rounded-lg
+            transition-all duration-300 hover:bg-background/30 hover:scale-105 hover:shadow-lg"
           onClick={() => router.push("/home")}
         >
           Launch Beta

@@ -1,7 +1,7 @@
 import { IFlight, IFlightOffer } from "@/data/flights";
 import { IHotel } from "@/data/hotels";
 import { calculateTotalCost } from "../package-builder";
-import { Building, Plane, Stethoscope } from "lucide-react";
+import { Building, Car, Plane, Stethoscope } from "lucide-react";
 
 interface IProps {
   selectedPrice: number;
@@ -52,7 +52,7 @@ export function ReviewSection({
             <h3 className="font-medium">Flights</h3>
             <p className="text-sm text-muted-foreground">
               {selectedDepartureFlight?.itineraries[0].segments[0].carrier.name} -{" "}
-              <span className="capitalize">{"Economy"}</span> // todo: get class
+              <span className="capitalize">{"Economy"}</span>
             </p>
             {flightType === "roundTrip" && (
               <p className="text-sm text-muted-foreground">Return flight included</p>
@@ -75,7 +75,7 @@ export function ReviewSection({
             <Building className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h3 className="font-medium">{selectedAccommodation?.name}</h3>
+            <h3 className="font-medium">Accommodation</h3>
             <p className="text-sm text-muted-foreground">
               {accommodationNights} nights at ${selectedAccommodation?.price}/night
             </p>
@@ -83,36 +83,21 @@ export function ReviewSection({
         </div>
         <p className="font-medium">${(selectedAccommodation?.price || 0) * accommodationNights}</p>
       </div>
-			
-      {selectedAccommodation && (
-        <p>
-          Accommodation: {selectedAccommodation.name} - $
-          {(selectedAccommodation.price || 0) * accommodationNights} (${selectedAccommodation.price}
-          /night for {accommodationNights} nights)
-        </p>
-      )}
-      {(includeAirportTransfer || includeClinicTransfer) && (
-        <p>
-          Local Transport:
-          {includeAirportTransfer && " Airport Transfer: $100"}
-          {includeAirportTransfer && includeClinicTransfer && ","}
-          {includeClinicTransfer && " Clinic Transfer: $50"}
-        </p>
-      )}
-      <p className="font-bold">
-        Total: $
-        {calculateTotalCost(
-          selectedPrice!,
-          skipFlights,
-          selectedDepartureFlight,
-          selectedReturnFlight,
-          flightType,
-          selectedAccommodation,
-          accommodationNights,
-          includeAirportTransfer,
-          includeClinicTransfer,
-        )}
-      </p>
+
+			<div className="flex items-start justify-between">
+				<div className="flex gap-3">
+					<div className="mt-1">
+						<Car className="h-5 w-5 text-primary" />
+					</div>
+					<div>
+						<h3 className="font-medium">Local Transport</h3>
+						<p className="text-sm text-muted-foreground">Airport and clinic transfers</p>
+					</div>
+				</div>
+				<p className="font-medium">
+					${((includeAirportTransfer ? 100 : 0) + (includeClinicTransfer ? 50 : 0)).toLocaleString()}
+				</p>
+			</div>
     </div>
   );
 }

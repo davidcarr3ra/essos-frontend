@@ -101,8 +101,7 @@ export default function FlightsSection({
 			};
 			const flights = await searchFlights(searchParams);
 			setFlightSearchResults(flights);
-
-			console.log("FORMATTED FLIGHT:", formatFlightForDisplay(flights[0]));
+			
 		} catch (error) {
 			console.error("Error fetching flights:", error);
 			setFlightSearchResults([]);
@@ -163,34 +162,36 @@ export default function FlightsSection({
     <div className="w-full bg-background">
       <div className="container mx-auto p-4 space-y-6">
         {/* Top Bar */}
-        <div className="flex items-center justify-start space-x-4">
-          <div className="flex items-center space-x-2">
-            <Switch checked={isRoundTrip} onCheckedChange={setIsRoundTrip} />
-            <Label>Round trip</Label>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Switch checked={isRoundTrip} onCheckedChange={setIsRoundTrip} />
+              <Label>Round trip</Label>
+            </div>
+            <Select defaultValue="1">
+              <SelectTrigger className="w-[130px]">
+                <SelectValue placeholder="Passengers" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1 passenger</SelectItem>
+                <SelectItem value="2">2 passengers</SelectItem>
+                <SelectItem value="3">3 passengers</SelectItem>
+                <SelectItem value="4">4 passengers</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select defaultValue="economy">
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Class" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={CabinClass.Economy}>Economy</SelectItem>
+                <SelectItem value={CabinClass.PremiumEconomy}>Premium Economy</SelectItem>
+                <SelectItem value={CabinClass.Business}>Business</SelectItem>
+                <SelectItem value={CabinClass.First}>First Class</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Select defaultValue="1">
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Passengers" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">1 passenger</SelectItem>
-              <SelectItem value="2">2 passengers</SelectItem>
-              <SelectItem value="3">3 passengers</SelectItem>
-              <SelectItem value="4">4 passengers</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select defaultValue="economy">
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="Class" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={CabinClass.Economy}>Economy</SelectItem>
-              <SelectItem value={CabinClass.PremiumEconomy}>Premium Economy</SelectItem>
-              <SelectItem value={CabinClass.Business}>Business</SelectItem>
-              <SelectItem value={CabinClass.First}>First Class</SelectItem>
-            </SelectContent>
-          </Select>
-					<Button onClick={handleSearchFlights}>Search Flights</Button>
+          <Button onClick={handleSearchFlights}>Search Flights</Button>
         </div>
 
         {/* Search Bar */}
@@ -518,7 +519,7 @@ export default function FlightsSection({
                 className="min-w-[180px] justify-start text-left font-normal px-4 whitespace-nowrap"
               >
                 <PlaneLanding className="mr-3 h-4 w-4" />
-                <span className="truncate">Connecting airports</span>
+                <span className="truncate">Layovers</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[300px] p-4">
@@ -581,87 +582,89 @@ export default function FlightsSection({
         </div>
 
         {/* Flight Results */}
-        <ScrollArea className="h-[600px] pr-4">
-          <div className="space-y-4">
-            {/* Best Price Section */}
-            <div className="flex items-center justify-between">
-              <div className="text-lg font-semibold">Best departing flights</div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Sort by:</span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      Price
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Price</DropdownMenuItem>
-                    <DropdownMenuItem>Duration</DropdownMenuItem>
-                    <DropdownMenuItem>Departure time</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
+				{flightSearchResults.length > 0 && (
+					<ScrollArea className="h-[600px] pr-4">
+						<div className="space-y-4">
+							{/* Best Price Section */}
+							<div className="flex items-center justify-between">
+								<div className="text-lg font-semibold">Best departing flights</div>
+								<div className="flex items-center gap-2">
+									<span className="text-sm text-muted-foreground">Sort by:</span>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button variant="outline" size="sm">
+												Price
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end">
+											<DropdownMenuItem>Price</DropdownMenuItem>
+											<DropdownMenuItem>Duration</DropdownMenuItem>
+											<DropdownMenuItem>Departure time</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</div>
+							</div>
 
-            {/* Flight Cards */}
-            {flightSearchResults.length > 0 ? (
-              flightSearchResults.map((flight) => {
-                const displayFlight = formatFlightForDisplay(flight);
-                return (
-                  <Card
-                    key={flight.id}
-                    className={cn(
-                      "transition-colors cursor-pointer",
-                      selectedFlight === flight.id && "border-primary bg-primary/5"
-                    )}
-                    role="button"
-                    tabIndex={0}
-                    aria-selected={selectedFlight === flight.id}
-                    onClick={() => {
-                      setSelectedFlight(flight.id);
-                      setSelectedDepartureFlight(flight);
-                    }}
-                    onKeyDown={(e) => { // todo: potentially remove
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setSelectedFlight(flight.id);
-                        setSelectedDepartureFlight(flight);
-                      }
-                    }}
-                  >
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                            <Plane className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <div className="font-semibold">{displayFlight.time}</div>
-                            <div className="text-sm text-muted-foreground">{displayFlight.airline}</div>
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-semibold">{displayFlight.duration}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {displayFlight.stops}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="font-semibold">{displayFlight.price}</div>
-                          <div className="text-sm text-muted-foreground">round trip</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                No flights found. Please try different search criteria.
-              </div>
-            )}
-          </div>
-        </ScrollArea>
+							{/* Flight Cards */}
+							{flightSearchResults.length > 0 ? (
+								flightSearchResults.map((flight) => {
+									const displayFlight = formatFlightForDisplay(flight);
+									return (
+										<Card
+											key={flight.id}
+											className={cn(
+												"transition-colors cursor-pointer",
+												selectedFlight === flight.id && "border-primary bg-primary/5"
+											)}
+											role="button"
+											tabIndex={0}
+											aria-selected={selectedFlight === flight.id}
+											onClick={() => {
+												setSelectedFlight(flight.id);
+												setSelectedDepartureFlight(flight);
+											}}
+											onKeyDown={(e) => { // todo: potentially remove
+												if (e.key === "Enter" || e.key === " ") {
+													e.preventDefault();
+													setSelectedFlight(flight.id);
+													setSelectedDepartureFlight(flight);
+												}
+											}}
+										>
+											<CardContent className="p-6">
+												<div className="flex items-center justify-between">
+													<div className="flex items-center gap-4">
+														<div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+															<Plane className="h-4 w-4" />
+														</div>
+														<div>
+															<div className="font-semibold">{displayFlight.time}</div>
+															<div className="text-sm text-muted-foreground">{displayFlight.airline}</div>
+														</div>
+													</div>
+													<div className="text-center">
+														<div className="font-semibold">{displayFlight.duration}</div>
+														<div className="text-sm text-muted-foreground">
+															{displayFlight.stops}
+														</div>
+													</div>
+													<div>
+														<div className="font-semibold">{displayFlight.price}</div>
+														<div className="text-sm text-muted-foreground">round trip</div>
+													</div>
+												</div>
+											</CardContent>
+										</Card>
+									);
+								})
+							) : (
+								<div className="text-center py-8 text-muted-foreground">
+									No flights found. Please try different search criteria.
+								</div>
+							)}
+						</div>
+					</ScrollArea>
+				)}
       </div>
     </div>
   );
