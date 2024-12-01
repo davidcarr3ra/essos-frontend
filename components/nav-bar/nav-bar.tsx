@@ -36,8 +36,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DarkModeToggle } from "./dark-mode-toggle";
+import { useRouter } from "next/navigation";
 
 export default function NavBar() {
+  const router = useRouter();
   const { theme } = useTheme();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
@@ -61,6 +63,7 @@ export default function NavBar() {
         width={100}
         height={100}
         className="cursor-pointer"
+				onClick={() => router.push("/home")}
       />
       <div className="flex items-center space-x-2">
         <Link href="/doctor-signup" passHref>
