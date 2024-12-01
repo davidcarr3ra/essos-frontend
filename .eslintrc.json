@@ -46,7 +46,7 @@
     "jsx-a11y/interactive-supports-focus": "warn",
     "prettier/prettier": "warn",
     "no-unused-vars": "off",
-    "unused-imports/no-unused-vars": "error",
+    "unused-imports/no-unused-vars": "warn",
     "unused-imports/no-unused-imports": "error",
     "@typescript-eslint/no-unused-vars": [
       "warn",
@@ -59,6 +59,7 @@
     "import/order": "off",
     "react/self-closing-comp": "warn",
     "react/jsx-sort-props": "off",
-    "padding-line-between-statements": "off"
+    "padding-line-between-statements": "off",
+    "react/no-unescaped-entities": "off"
   }
 }

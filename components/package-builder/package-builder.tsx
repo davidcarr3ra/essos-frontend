@@ -23,7 +23,7 @@ import {
 import { useDoctor } from "@/context/doctor-context";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { IFlightOffer, flightOptions, IFlight } from "@/data/flights";
+import { IFlightOffer } from "@/data/flights";
 import { AccommodationSection } from "./steps/accommodation";
 import { LocalTransportSection } from "./steps/local-transport";
 import { ReviewSection } from "./steps/review";

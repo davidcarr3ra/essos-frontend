@@ -12,7 +12,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Check,
-  Upload,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,13 +25,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

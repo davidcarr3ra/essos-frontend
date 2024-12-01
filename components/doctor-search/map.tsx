@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
 import Link from "next/link";
-import { doctors, IDoctor } from "@/data/doctors";
+import { doctors } from "@/data/doctors";
 import { useDoctor } from "@/context/doctor-context";
 
 // First, add this CSS either in your global CSS file or as a styled-jsx block at the top of your component

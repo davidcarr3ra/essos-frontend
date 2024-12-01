@@ -9,7 +9,6 @@ interface PageProps {
 }
 
 export default function DoctorPage({ params }: PageProps) {
-  console.log("PARAMS", params);
   const doctor = getDoctorById(params.id);
 
   if (!doctor) {

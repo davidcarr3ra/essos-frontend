@@ -1,6 +1,5 @@
-import { IFlight, IFlightOffer } from "@/data/flights";
+import { IFlightOffer } from "@/data/flights";
 import { IHotel } from "@/data/hotels";
-import { calculateTotalCost } from "../package-builder";
 import { Building, Car, Plane, Stethoscope } from "lucide-react";
 
 interface IProps {
