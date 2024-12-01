@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock, Plane, PlaneLanding, PlaneTakeoff, RefreshCcw } from 'lucide-react';
+import { CalendarIcon, Clock, Plane, PlaneLanding, PlaneTakeoff } from 'lucide-react';
 import * as React from "react";
 import { format } from "date-fns";
 
@@ -101,7 +101,7 @@ export default function FlightsSection({
 			};
 			const flights = await searchFlights(searchParams);
 			setFlightSearchResults(flights);
-			
+
 		} catch (error) {
 			console.error("Error fetching flights:", error);
 			setFlightSearchResults([]);
