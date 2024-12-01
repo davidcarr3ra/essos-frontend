@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import NavBar from "@/components/nav-bar/nav-bar";
 import { DoctorProvider } from "@/context/doctor-context";
 import { ThemeProvider } from "@/components/theme-provider";
+import NavBarWrapper from "@/components/nav-bar/nav-bar-wrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,9 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div>
-            <NavBar />
-          </div>
+          <NavBarWrapper />
           <DoctorProvider>{children}</DoctorProvider>
         </ThemeProvider>
       </body>

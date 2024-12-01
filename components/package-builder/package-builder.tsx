@@ -19,23 +19,17 @@ import {
   Car,
   Plane,
   Stethoscope,
-  CalendarIcon,
-  Star,
-  Wifi,
-  Coffee,
-  Utensils,
-  Dumbbell,
 } from "lucide-react";
 import { useDoctor } from "@/context/doctor-context";
 import Link from "next/link";
-import { FlightsSection } from "./steps/flights";
-import { flightOptions, IFlight } from "@/data/flights";
+import { useRouter } from "next/navigation";
+import { IFlightOffer, flightOptions, IFlight } from "@/data/flights";
 import { AccommodationSection } from "./steps/accommodation";
 import { LocalTransportSection } from "./steps/local-transport";
 import { ReviewSection } from "./steps/review";
 import { treatments } from "@/data/treatments";
-import { hotels, IHotel } from "@/data/hotels";
-import FlightsSection2 from "./steps/flights2";
+import { IHotel } from "@/data/hotels";
+import FlightsSection from "./steps/flights";
 
 const steps = [
   {
@@ -71,12 +65,14 @@ const steps = [
 ];
 
 export default function PackageBuilder() {
+  const router = useRouter();
+  const { selectedDoctor } = useDoctor();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedTreatment, setSelectedTreatment] = useState<string | null>(null);
   const [departureDate, setDepartureDate] = useState<Date>(new Date(2024, 10, 1));
   const [returnDate, setReturnDate] = useState<Date>(new Date(2024, 10, 5));
-  const [selectedDepartureFlight, setSelectedDepartureFlight] = useState<IFlight | null>(null);
-  const [selectedReturnFlight, setSelectedReturnFlight] = useState<IFlight | null>(null);
+  const [selectedDepartureFlight, setSelectedDepartureFlight] = useState<IFlightOffer | null>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] = useState<IFlightOffer | null>(null);
   const [selectedAccommodation, setSelectedAccommodation] = useState<IHotel | null>(null);
   const [accommodationNights, setAccommodationNights] = useState(1);
   const [includeAirportTransfer, setIncludeAirportTransfer] = useState(false);
@@ -84,6 +80,7 @@ export default function PackageBuilder() {
   const [skipFlights, setSkipFlights] = useState(false);
   const [flightType, setFlightType] = useState<"oneWay" | "roundTrip" | undefined>("roundTrip");
   const { selectedPrice } = useDoctor();
+	const [flightSearchResults, setFlightSearchResults] = useState<IFlightOffer[]>([]);
 
   useEffect(() => {
     if (departureDate) {
@@ -103,8 +100,15 @@ export default function PackageBuilder() {
 
   const handleBack = () => {
     if (currentStep > 0) {
-      if (currentStep === 3 && skipFlights) {
-        setCurrentStep(currentStep - 2); // Go back to treatment step
+      if (currentStep === 1) {
+        // Redirect to doctor's page if we have a selected doctor
+        if (selectedDoctor) {
+          router.push(`/doctor/${selectedDoctor.id}`);
+        } else {
+          router.push('/doctor-search'); // Fallback if no doctor selected
+        }
+      } else if (currentStep === 3 && skipFlights) {
+        setCurrentStep(currentStep - 2);
       } else {
         setCurrentStep(currentStep - 1);
       }
@@ -128,22 +132,11 @@ export default function PackageBuilder() {
         );
       case "flights":
         return (
-          // <FlightsSection
-          //   departureDate={departureDate}
-          //   setDepartureDate={setDepartureDate}
-          //   returnDate={returnDate}
-          //   setReturnDate={setReturnDate}
-          //   selectedDepartureFlight={selectedDepartureFlight}
-          //   setSelectedDepartureFlight={setSelectedDepartureFlight}
-          //   selectedReturnFlight={selectedReturnFlight}
-          //   setSelectedReturnFlight={setSelectedReturnFlight}
-          //   skipFlights={skipFlights}
-          //   setSkipFlights={setSkipFlights}
-          //   flightType={flightType}
-          //   setFlightType={setFlightType}
-          //   handleNext={handleNext}
-          // />
-          <FlightsSection2 />
+          <FlightsSection 
+						setFlightSearchResults={setFlightSearchResults}
+						flightSearchResults={flightSearchResults}
+						setSelectedDepartureFlight={setSelectedDepartureFlight}
+					/>
         );
       case "accommodation":
         return (
@@ -228,14 +221,30 @@ export default function PackageBuilder() {
 
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle>{steps[currentStep].title}</CardTitle>
-          <CardDescription>{steps[currentStep].description}</CardDescription>
+          <div className="flex justify-between items-start">
+            <div className="space-y-1.5">
+              <CardTitle>{steps[currentStep].title}</CardTitle>
+              <CardDescription>{steps[currentStep].description}</CardDescription>
+            </div>
+            {currentStep !== 4 && (
+              <Button
+                variant="outline"
+                onClick={() => {
+                setSelectedAccommodation(null);
+                setAccommodationNights(1);
+                handleNext();
+              }}
+            >
+                Skip {steps[currentStep].title}
+              </Button>
+            )}
+          </div>
         </CardHeader>
         <CardContent>{renderStepContent()}</CardContent>
         <CardFooter className="flex justify-between">
-          {currentStep !== 0 && steps[currentStep].id !== "flights" && (
+          {/* {currentStep !== 0 && steps[currentStep].id !== "flights" && ( */}
             <Button onClick={handleBack}>Back</Button>
-          )}
+          {/* )} */}
           {currentStep === steps.length - 1 ? (
             <Link href="/checkout">
               <Button>Checkout</Button>
@@ -276,8 +285,8 @@ export default function PackageBuilder() {
 export const calculateTotalCost = (
   treatmentPrice: number,
   skipFlights: boolean,
-  selectedDepartureFlight: IFlight | null,
-  selectedReturnFlight: IFlight | null,
+  selectedDepartureFlight: IFlightOffer | null,
+  selectedReturnFlight: IFlightOffer | null,
   flightType: "oneWay" | "roundTrip" | undefined,
   selectedAccommodation: IHotel | null,
   accommodationNights: number,
@@ -288,20 +297,22 @@ export const calculateTotalCost = (
   total += treatmentPrice;
   if (!skipFlights) {
     if (selectedDepartureFlight) {
-      const departureFlight = flightOptions.find(
-        (f) => f.id === selectedDepartureFlight.id && f.class === selectedDepartureFlight.class,
-      );
-      if (departureFlight) {
-        total += departureFlight.price;
-      }
+      // const departureFlight = flightOptions.find(
+      //   (f) => f.id === selectedDepartureFlight.id && f.class === selectedDepartureFlight.class,
+      // );
+      // if (departureFlight) {
+      //   total += departureFlight.price;
+      // }
+			total += parseFloat(selectedDepartureFlight.totalAmount);
     }
     if (flightType === "roundTrip" && selectedReturnFlight) {
-      const returnFlight = flightOptions.find(
-        (f) => f.id === selectedReturnFlight.id && f.class === selectedReturnFlight.class,
-      );
-      if (returnFlight) {
-        total += returnFlight.price;
-      }
+      // const returnFlight = flightOptions.find(
+      //   (f) => f.id === selectedReturnFlight.id && f.class === selectedReturnFlight.class,
+      // );
+      // if (returnFlight) {
+      //   total += returnFlight.price;
+      // }
+			total += parseFloat(selectedReturnFlight.totalAmount);
     }
   }
   if (selectedAccommodation) {

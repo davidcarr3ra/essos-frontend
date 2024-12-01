@@ -71,8 +71,7 @@ export function AccommodationSection({
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Accommodation Selection</h3>
+      {/* <div className="flex justify-between items-center">
         <Button
           variant="outline"
           onClick={() => {
@@ -83,7 +82,7 @@ export function AccommodationSection({
         >
           Skip Accommodation
         </Button>
-      </div>
+      </div> */}
 
       <div className="flex gap-4">
         <div className="flex-1">

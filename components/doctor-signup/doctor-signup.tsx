@@ -91,14 +91,12 @@ export default function DoctorSignUp() {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("ON SUBMIT!");
     const formData = {
       ...data,
       photoId: data.photoId[0],
       medicalCertificates: data.medicalCertificates[0],
       cv: data.cv[0],
     };
-    console.log(formData);
     setIsSubmitted(true);
   };
 

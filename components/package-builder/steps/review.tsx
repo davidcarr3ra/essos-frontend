@@ -1,13 +1,13 @@
-import { IFlight, flightOptions } from "@/data/flights";
-import { hotels, IHotel } from "@/data/hotels";
+import { IFlight, IFlightOffer } from "@/data/flights";
+import { IHotel } from "@/data/hotels";
 import { calculateTotalCost } from "../package-builder";
 import { Building, Plane, Stethoscope } from "lucide-react";
 
 interface IProps {
   selectedPrice: number;
   skipFlights: boolean;
-  selectedDepartureFlight: IFlight | null;
-  selectedReturnFlight: IFlight | null;
+  selectedDepartureFlight: IFlightOffer | null;
+  selectedReturnFlight: IFlightOffer | null;
   flightType: "oneWay" | "roundTrip" | undefined;
   selectedAccommodation: IHotel | null;
   accommodationNights: number;
@@ -51,8 +51,8 @@ export function ReviewSection({
           <div>
             <h3 className="font-medium">Flights</h3>
             <p className="text-sm text-muted-foreground">
-              {selectedDepartureFlight?.airline} -{" "}
-              <span className="capitalize">{selectedDepartureFlight?.class}</span>
+              {selectedDepartureFlight?.itineraries[0].segments[0].carrier.name} -{" "}
+              <span className="capitalize">{"Economy"}</span> // todo: get class
             </p>
             {flightType === "roundTrip" && (
               <p className="text-sm text-muted-foreground">Return flight included</p>
@@ -62,8 +62,10 @@ export function ReviewSection({
         <p className="font-medium">
           $
           {(
-            (selectedDepartureFlight?.price ?? 0) + (selectedReturnFlight?.price ?? 0)
-          ).toLocaleString()}
+            (parseFloat(selectedDepartureFlight?.totalAmount ?? "0") +
+              parseFloat(selectedReturnFlight?.totalAmount ?? "0"))
+              .toLocaleString()
+          )}
         </p>
       </div>
 
@@ -81,33 +83,7 @@ export function ReviewSection({
         </div>
         <p className="font-medium">${(selectedAccommodation?.price || 0) * accommodationNights}</p>
       </div>
-
-      {/* {!skipFlights && (
-        <>
-          {selectedDepartureFlight && (
-            <p>Departure Flight: {flightOptions.find(f => 
-              f.id === selectedDepartureFlight.id && 
-              f.class === selectedDepartureFlight.class
-            )?.airline} - 
-              ${flightOptions.find(f => 
-                f.id === selectedDepartureFlight.id && 
-                f.class === selectedDepartureFlight.class
-              )?.price} ({selectedDepartureFlight.class === 'firstClass' ? 'First Class' : selectedDepartureFlight.class.charAt(0).toUpperCase() + selectedDepartureFlight.class.slice(1)})
-            </p>
-          )}
-          {flightType === 'roundTrip' && selectedReturnFlight && (
-            <p>Return Flight: {flightOptions.find(f => 
-              f.id === selectedReturnFlight.id && 
-              f.class === selectedReturnFlight.class
-            )?.airline} - 
-              ${flightOptions.find(f => 
-                f.id === selectedReturnFlight.id && 
-                f.class === selectedReturnFlight.class
-              )?.price} ({selectedReturnFlight.class === 'firstClass' ? 'First Class' : selectedReturnFlight.class.charAt(0).toUpperCase() + selectedReturnFlight.class.slice(1)})
-            </p>
-          )}
-        </>
-      )} */}
+			
       {selectedAccommodation && (
         <p>
           Accommodation: {selectedAccommodation.name} - $

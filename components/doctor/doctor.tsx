@@ -4,14 +4,7 @@ import { useState, useEffect } from "react";
 import { format, getDay } from "date-fns";
 import { CalendarIcon, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,15 +15,12 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useDoctor } from "@/context/doctor-context";
 import { IDoctor } from "@/data/doctors";
-import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 
 interface IProps {
   doctor: IDoctor;

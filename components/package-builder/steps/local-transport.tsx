@@ -19,19 +19,6 @@ export function LocalTransportSection({
 }: IProps) {
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Local Transport Options</h3>
-        <Button
-          variant="outline"
-          onClick={() => {
-            setIncludeAirportTransfer(false);
-            setIncludeClinicTransfer(false);
-            handleNext();
-          }}
-        >
-          Skip Local Transport
-        </Button>
-      </div>
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
           <Checkbox

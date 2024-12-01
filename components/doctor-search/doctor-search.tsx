@@ -33,7 +33,7 @@ export default function DoctorSearch() {
   const [location, setLocation] = useState("");
   const [searchResults, setSearchResults] = useState(doctors);
   const [isMapView, setIsMapView] = useState(false);
-  const { setSelectedPrice } = useDoctor();
+  const { setSelectedPrice, setSelectedDoctor } = useDoctor();
 
   const handleSearch = () => {
     // In a real application, this would be an API call
@@ -177,7 +177,10 @@ export default function DoctorSearch() {
                     <Link
                       href={`/doctor/${doctor.id}`}
                       className={`${buttonVariants({ variant: "default" })} w-full`}
-                      onClick={() => setSelectedPrice(doctor.price)}
+                      onClick={() => {
+                        setSelectedPrice(doctor.price);
+                        setSelectedDoctor(doctor);
+                      }}
                     >
                       Book Appointment
                     </Link>

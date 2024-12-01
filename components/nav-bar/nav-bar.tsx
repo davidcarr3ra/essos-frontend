@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import {
   CircleUserRound,
   Gift,
@@ -13,7 +14,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-
+import Image from "next/image";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,6 +38,7 @@ import { Label } from "@/components/ui/label";
 import { DarkModeToggle } from "./dark-mode-toggle";
 
 export default function NavBar() {
+  const { theme } = useTheme();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -53,9 +55,13 @@ export default function NavBar() {
 
   return (
     <header className="p-4 flex justify-between items-center">
-      <Link href="/" className="text-2xl font-bold text-primary">
-        <h1>Essos</h1>
-      </Link>
+      <Image
+        src={theme === "dark" ? "/images/brand/logo-dark.png" : "/images/brand/logo-light.png"}
+        alt="Logo"
+        width={100}
+        height={100}
+        className="cursor-pointer"
+      />
       <div className="flex items-center space-x-2">
         <Link href="/doctor-signup" passHref>
           {!isLoggedIn && (

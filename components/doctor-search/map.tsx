@@ -46,10 +46,6 @@ export default function CategoryMapView() {
     zoom: 1.5,
   });
 
-  const handleDoctorClick = (doctor: IDoctor | null) => {
-    setSelectedDoctor(doctor);
-  };
-
   return (
     // <div className="flex flex-col h-screen">
     <div className="flex flex-col h-full">
@@ -76,8 +72,8 @@ export default function CategoryMapView() {
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  handleDoctorClick(doctor);
                   setSelectedPrice(doctor.price);
+									setSelectedDoctor(doctor);
                 }}
               >
                 ${doctor.price}

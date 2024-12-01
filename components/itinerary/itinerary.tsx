@@ -52,16 +52,23 @@ export default function PostCheckout() {
           />
           <div className="flex justify-between mt-2">
             {stages.map((stage, index) => (
-              <div
+              <button
                 key={stage.id}
-                className={`flex flex-col items-center cursor-pointer ${currentStage === stage.id ? "text-primary" : "text-muted-foreground"}`}
+                className={`flex flex-col items-center border-0 bg-transparent ${
+                  currentStage === stage.id ? "text-primary" : "text-muted-foreground"
+                }`}
                 onClick={() => setCurrentStage(stage.id)}
+                aria-label={`Go to ${stage.name} stage`}
+                aria-current={currentStage === stage.id ? "step" : undefined}
               >
                 <div
-                  className={`w-3 h-3 rounded-full mb-1 ${currentStage === stage.id ? "bg-primary" : "bg-secondary"}`}
+                  className={`w-3 h-3 rounded-full mb-1 ${
+                    currentStage === stage.id ? "bg-primary" : "bg-secondary"
+                  }`}
+                  aria-hidden="true"
                 />
                 <span className="text-xs">{stage.name}</span>
-              </div>
+              </button>
             ))}
           </div>
         </CardContent>
