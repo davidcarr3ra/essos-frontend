@@ -1,7 +1,7 @@
-import WaitlistPage from "@/components/waitlist/waitlist";
+import HomePage from "@/components/home/home";
 
 export default function Home() {
   return (
-    <WaitlistPage />
+		<HomePage />
   );
 }

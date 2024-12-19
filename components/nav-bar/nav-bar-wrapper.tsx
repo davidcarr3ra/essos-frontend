@@ -7,9 +7,9 @@ export default function NavBarWrapper() {
   const pathname = usePathname();
   
   // Don't render navbar on home page
-  if (pathname === '/') {
-    return null;
-  }
+  // if (pathname === '/') {
+  //   return null;
+  // }
   
   return <NavBar />;
 } 
